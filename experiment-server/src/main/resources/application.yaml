@@ -1,0 +1,30 @@
+spring:
+  rsocket:
+    server:
+      port: 7100
+      mapping-path: /route
+      transport: websocket
+  cloud:
+    function:
+      definition:
+        supplyLoan;consumeLoan;
+    stream:
+      default:
+        group: svc_loan
+      poller:
+        fixed-delay: 10000
+      bindings:
+        supplyLoan-out-0:
+          destination: loan_topic
+
+        consumeLoan-in-0:
+          destination: loan_topic
+
+      kafka:
+        binder:
+          brokers: localhost:11002
+          autoAddPartitions: true
+          autoCreateTopics: true
+
+logging:
+  level.*: DEBUG
